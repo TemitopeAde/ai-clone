@@ -1,11 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Copilot</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .inserted {
+            background-color: #d4fcdc;
+            text-decoration: none;
+        }
+
+        .deleted {
+            background-color: #f8d7da;
+            text-decoration: line-through;
+        }
+    </style>
 </head>
+
 <body>
     <div class="container">
         <div class="tabs">
@@ -19,7 +32,7 @@
                 <input type="text" id="chat-input" placeholder="Type a message...">
                 <button onclick="sendMessage()">Send</button>
             </div>
-            <button id="accept-changes" onclick="acceptChanges()">Accept Changes</button>
+            <button id="accept-changes" onclick="acceptChanges()" style="display: none;">Accept Changes</button>
         </div>
 
         <div id="search" class="tab-content">
@@ -45,4 +58,5 @@
     <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>
