@@ -48,14 +48,14 @@ function loadSearchResults(tabName) {
     if (tabName === "videos") {
       const videoElement = document.createElement("div");
       videoElement.innerHTML = `
-                    <div class="video-item">
-                        <img src="${result.thumbnail}" onclick="openModal('${result.videoSrc}')">
-                        <div>
-                            <h4>${result.title}</h4>
-                            <p>${result.description}</p>
-                        </div>
-                    </div>
-                `;
+                  <div class="video-item">
+                      <img src="${result.thumbnail}" onclick="openModal('${result.videoSrc}')">
+                      <div>
+                          <h4>${result.title}</h4>
+                          <p>${result.description}</p>
+                      </div>
+                  </div>
+              `;
       resultsContainer.appendChild(videoElement);
     }
     // Add similar blocks for images and audio
@@ -143,7 +143,7 @@ async function getResponse(message) {
   return "No draft found for the given prompt.";
 }
 
-let currentDraft = "";
+let currentDraft = ""
 
 function showDiff() {
   const newText = document.getElementById("new-text").value;
