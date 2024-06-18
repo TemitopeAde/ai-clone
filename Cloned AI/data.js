@@ -14,10 +14,38 @@ const searchResults = {
         }
     ],
     images: [
-        // Add image results
+        {
+            title: "Image Title 1",
+            description: "Short Description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            thumbnail: "assets/images/image.jpg",
+            imageSrc: "assets/images/image.jpg"
+        },
+        {
+            title: "Image Title 2",
+            description: "Short Description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            thumbnail: "assets/images/image.jpg",
+            imageSrc: "assets/images/image.jpg"
+        },
+        {
+            title: "Image Title 3",
+            description: "Short Description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            thumbnail: "assets/images/image-one.jpg",
+            imageSrc: "assets/images/image-one.jpg"
+        }
     ],
     audio: [
-        // Add audio results
+        {
+            title: "Audio Title 1",
+            description: "Short Description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            thumbnail: "assets/images/image.jpg",
+            audioSrc: "assets/audio/file.mp3"
+        },
+        {
+            title: "Audio Title 2",
+            description: "Short Description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            thumbnail: "assets/images/image.jpg",
+            audioSrc: "assets/audio/file.mp3"
+        }
     ]
 };
 

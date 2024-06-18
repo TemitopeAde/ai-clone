@@ -14,19 +14,14 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
-function openTab(evt, tabName) {
-  const tabContent = document.getElementsByClassName("tab-content");
-  for (let i = 0; i < tabContent.length; i++) {
-    tabContent[i].style.display = "none";
-    tabContent[i].classList.remove("active");
-  }
-  const tabButtons = document.getElementsByClassName("tab-button");
-  for (let i = 0; i < tabButtons.length; i++) {
-    tabButtons[i].className = tabButtons[i].className.replace(" active", "");
-  }
-  document.getElementById(tabName).style.display = "block";
-  document.getElementById(tabName).classList.add("active");
-  evt.currentTarget.className += " active";
+function openTab(event, tabName) {
+  const tabButtons = document.querySelectorAll('.tab-button');
+  tabButtons.forEach(button => button.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+
+  const tabContents = document.querySelectorAll('.tab-content');
+  tabContents.forEach(content => content.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
 }
 
 function openSearchTab(evt, searchTabName) {
@@ -34,6 +29,7 @@ function openSearchTab(evt, searchTabName) {
   for (let i = 0; i < searchContent.length; i++) {
     searchContent[i].style.display = "none";
     searchContent[i].classList.remove("active");
+    searchContent[i].innerHTML = ""; // Clear content of the search tab
   }
   const searchTabButtons = document.getElementsByClassName("search-tab-button");
   for (let i = 0; i < searchTabButtons.length; i++) {
@@ -50,23 +46,50 @@ function openSearchTab(evt, searchTabName) {
 
 function loadSearchResults(tabName) {
   const resultsContainer = document.getElementById(tabName);
-  resultsContainer.innerHTML = "";
-  const results = searchResults[tabName];
+  resultsContainer.innerHTML = ""; // Clear previous results
+  const results = searchResults[tabName]; // Get the relevant results array
+
   results.forEach(result => {
     if (tabName === "videos") {
       const videoElement = document.createElement("div");
+      videoElement.className = "video-item";
       videoElement.innerHTML = `
-                        <div class="video-item">
-                            <img src="${result.thumbnail}" onclick="openModal('${result.videoSrc}')">
-                            <div>
-                                <h4>${result.title}</h4>
-                                <p>${result.description}</p>
-                            </div>
-                        </div>
-                    `;
+          <video onclick="openModal('${result.videoSrc}')">
+              <source src="${result.videoSrc}" type="video/mp4">
+              Your browser does not support the video tag.
+          </video>
+          <div>
+              <h4 class="video-title" onclick="openModal('${result.videoSrc}')">${result.title}</h4>
+              <p>${result.description}</p>
+          </div>
+      `;
       resultsContainer.appendChild(videoElement);
+    } else if (tabName === "images") {
+      const imageElement = document.createElement("div");
+      imageElement.className = "image-item";
+      imageElement.innerHTML = `
+          <img src="${result.imageSrc}" alt="${result.title}" onclick="openModal('${result.imageSrc}')">
+          <div>
+              <h4>${result.title}</h4>
+              <p>${result.description}</p>
+          </div>
+      `;
+      resultsContainer.appendChild(imageElement);
+    } else if (tabName === "audio") {
+      const audioElement = document.createElement("div");
+      audioElement.className = "audio-item";
+      audioElement.innerHTML = `
+          <audio controls>
+              <source src="${result.audioSrc}" type="audio/mpeg">
+              Your browser does not support the audio tag.
+          </audio>
+          <div>
+              <h4>${result.title}</h4>
+              <p>${result.description}</p>
+          </div>
+      `;
+      resultsContainer.appendChild(audioElement);
     }
-    // Add similar blocks for images and audio
   });
 }
 
@@ -162,13 +185,14 @@ function displayDiff(newText) {
 }
 
 function acceptChanges() {
-  displayDiff(currentDraft, false);
+  displayDiff(currentDraft);
 }
 
 function rejectChanges() {
-  const diffViewer = document.getElementById("diff-viewer");
-  diffViewer.innerHTML = previousDraft;
-  currentDraft = previousDraft;
-  document.getElementById("accept-chances").style.display = "none";
-  document.getElementById("reject-changes").style.display = "none";
+  displayDiff(previousDraft);
+}
+
+function triggerFileUpload() {
+  const fileInput = document.getElementById("file-upload");
+  fileInput.click();
 }

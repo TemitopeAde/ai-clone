@@ -5,6 +5,10 @@ body {
   padding: 0;
 }
 
+img {
+  width: 100%;
+}
+
 .container {
   max-width: 1000px;
   margin: 20px auto;
@@ -41,7 +45,7 @@ body {
 .tab-button.active,
 .search-tab-button.active {
   background: #fff;
-  border-bottom: 2px solid #007bff;
+  border-bottom: 2px solid #000000;
   font-weight: bold;
   color: #000;
 }
@@ -72,7 +76,7 @@ body {
 
 button {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: hsla(0, 0%, 13%, 1);
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -81,7 +85,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #00070e;
 }
 
 .diff-viewer {
@@ -106,6 +110,7 @@ button:hover {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  gap: 1rem;
 }
 
 .video-item img {
@@ -154,8 +159,8 @@ button:hover {
 
 .close {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0px;
+  right: 7px;
   color: #aaa;
   font-size: 24px;
   cursor: pointer;
@@ -183,4 +188,72 @@ button:hover {
     
 #reject-changes {
     background-color: crimson;
+}
+.chat-input-container input[type="file"] {
+  display: none;
+}
+
+.upload-button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  margin-left: 8px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+
+  background: black !important;
+    padding: .2rem !important;
+    margin-right: .3rem;
+}
+
+.upload-button:hover {
+  background-color: #0056b3;
+}
+
+.video-title {
+  cursor: pointer;
+}
+.video-item video {
+  width: 320px;
+  pointer-events: fill;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .video-item {
+    flex-direction: column;
+  }
+
+  .video-item video {
+    
+    width: 100%; 
+  }
+  
+}
+
+.play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.play-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+}
+
+
+#images {
+  display: grid !important;
+  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
 }
