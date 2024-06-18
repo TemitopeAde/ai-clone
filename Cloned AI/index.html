@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Copilot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-button" onclick="openTab(event, 'chat')">Chat</button>
+            <button class="tab-button" onclick="openTab(event, 'search')">Search</button>
+        </div>
+
+        <div id="chat" class="tab-content">
+            <div id="diff-viewer" class="diff-viewer"></div>
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" placeholder="Type a message...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+            <button id="accept-changes" onclick="acceptChanges()">Accept Changes</button>
+        </div>
+
+        <div id="search" class="tab-content">
+            <div class="search-tabs">
+                <button class="search-tab-button" onclick="openSearchTab(event, 'videos')">Videos</button>
+                <button class="search-tab-button" onclick="openSearchTab(event, 'images')">Images</button>
+                <button class="search-tab-button" onclick="openSearchTab(event, 'audio')">Audio</button>
+            </div>
+            <div id="videos" class="search-content"></div>
+            <div id="images" class="search-content"></div>
+            <div id="audio" class="search-content"></div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <video id="modal-video" controls></video>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
