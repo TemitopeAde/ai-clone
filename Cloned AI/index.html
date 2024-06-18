@@ -32,7 +32,10 @@
                 <input type="text" id="chat-input" placeholder="Type a message...">
                 <button onclick="sendMessage()">Send</button>
             </div>
-            <button id="accept-changes" onclick="acceptChanges()" style="display: none;">Accept Changes</button>
+            <div class="flex-btn">
+                <button id="accept-changes" onclick="acceptChanges()" style="display: none;">Accept Changes</button>
+                <button id="reject-changes" onclick="rejectChanges()" style="display: none;">Reject Changes</button>
+            </div>
         </div>
 
         <div id="search" class="tab-content">

@@ -1,17 +1,28 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
   openTab({ currentTarget: document.querySelector(".tab-button") }, "chat");
-  openSearchTab({ currentTarget: document.querySelector(".search-tab-button") }, "videos");
+  openSearchTab(
+    { currentTarget: document.querySelector(".search-tab-button") },
+    "videos"
+  );
+
+  const chatInput = document.getElementById("chat-input");
+  chatInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
 });
 
 function openTab(evt, tabName) {
   const tabContent = document.getElementsByClassName("tab-content");
   for (let i = 0; i < tabContent.length; i++) {
-      tabContent[i].style.display = "none";
-      tabContent[i].classList.remove("active");
+    tabContent[i].style.display = "none";
+    tabContent[i].classList.remove("active");
   }
   const tabButtons = document.getElementsByClassName("tab-button");
   for (let i = 0; i < tabButtons.length; i++) {
-      tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+    tabButtons[i].className = tabButtons[i].className.replace(" active", "");
   }
   document.getElementById(tabName).style.display = "block";
   document.getElementById(tabName).classList.add("active");
@@ -21,12 +32,15 @@ function openTab(evt, tabName) {
 function openSearchTab(evt, searchTabName) {
   const searchContent = document.getElementsByClassName("search-content");
   for (let i = 0; i < searchContent.length; i++) {
-      searchContent[i].style.display = "none";
-      searchContent[i].classList.remove("active");
+    searchContent[i].style.display = "none";
+    searchContent[i].classList.remove("active");
   }
   const searchTabButtons = document.getElementsByClassName("search-tab-button");
   for (let i = 0; i < searchTabButtons.length; i++) {
-      searchTabButtons[i].className = searchTabButtons[i].className.replace(" active", "");
+    searchTabButtons[i].className = searchTabButtons[i].className.replace(
+      " active",
+      ""
+    );
   }
   document.getElementById(searchTabName).style.display = "block";
   document.getElementById(searchTabName).classList.add("active");
@@ -39,20 +53,20 @@ function loadSearchResults(tabName) {
   resultsContainer.innerHTML = "";
   const results = searchResults[tabName];
   results.forEach(result => {
-      if (tabName === "videos") {
-          const videoElement = document.createElement("div");
-          videoElement.innerHTML = `
-              <div class="video-item">
-                  <img src="${result.thumbnail}" onclick="openModal('${result.videoSrc}')">
-                  <div>
-                      <h4>${result.title}</h4>
-                      <p>${result.description}</p>
-                  </div>
-              </div>
-          `;
-          resultsContainer.appendChild(videoElement);
-      }
-      // Add similar blocks for images and audio
+    if (tabName === "videos") {
+      const videoElement = document.createElement("div");
+      videoElement.innerHTML = `
+                        <div class="video-item">
+                            <img src="${result.thumbnail}" onclick="openModal('${result.videoSrc}')">
+                            <div>
+                                <h4>${result.title}</h4>
+                                <p>${result.description}</p>
+                            </div>
+                        </div>
+                    `;
+      resultsContainer.appendChild(videoElement);
+    }
+    // Add similar blocks for images and audio
   });
 }
 
@@ -72,7 +86,12 @@ function closeModal() {
 
 async function sendMessage() {
   const chatInput = document.getElementById("chat-input");
-  const message = chatInput.value;
+  const message = chatInput.value.trim(); // Remove leading/trailing whitespace
+
+  if (message === "") {
+    return; // Do not submit if the input is empty
+  }
+
   chatInput.value = "";
   const response = await getResponse(message);
   displayDiff(response);
@@ -81,28 +100,34 @@ async function sendMessage() {
 async function getResponse(message) {
   // Mock response based on the input message
   if (message.toLowerCase().includes("refugee")) {
-      return billDrafts.refugee;
+    return billDrafts.refugee;
   } else if (message.toLowerCase().includes("make the language more formal")) {
-      return billDrafts.formalRefugee;
+    return billDrafts.formalRefugee;
   }
   return "No draft found for the given prompt.";
 }
 
 let currentDraft = "";
+let previousDraft = "";
 
 function diffStrings(oldStr, newStr) {
   const dmp = new diff_match_patch();
   const diffs = dmp.diff_main(oldStr, newStr);
   dmp.diff_cleanupSemantic(diffs);
 
-  const html = diffs.map(part => {
+  const html = diffs
+    .map(part => {
       const [type, text] = part;
       switch (type) {
-          case 1: return `<span class="inserted">${text}</span>`;
-          case -1: return `<span class="deleted">${text}</span>`;
-          default: return text;
+        case 1:
+          return `<span class="inserted">${text}</span>`;
+        case -1:
+          return `<span class="deleted">${text}</span>`;
+        default:
+          return text;
       }
-  }).join('');
+    })
+    .join("");
 
   return html;
 }
@@ -110,24 +135,40 @@ function diffStrings(oldStr, newStr) {
 function displayDiff(newText) {
   const diffViewer = document.getElementById("diff-viewer");
   const acceptButton = document.getElementById("accept-changes");
+  const rejectButton = document.getElementById("reject-changes");
 
   const diffHtml = diffStrings(currentDraft, newText);
   diffViewer.innerHTML = diffHtml;
 
   // Check if there are any differences
-  const hasInsertedOrDeleted = diffHtml.includes('class="deleted"') || diffHtml.includes('class="inserted"');
+  const hasInsertedOrDeleted =
+    diffHtml.includes('class="deleted"') ||
+    diffHtml.includes('class="inserted"');
   if (hasInsertedOrDeleted && currentDraft !== "") {
-      acceptButton.style.display = "block";
+    acceptButton.style.display = "block";
+    rejectButton.style.display = "block";
   } else {
-      acceptButton.style.display = "none";
+    acceptButton.style.display = "none";
+    rejectButton.style.display = "none";
   }
 
-  // Only update currentDraft when there are changes
-  if (currentDraft === "") {
-      currentDraft = newText;
+  // Update previousDraft before changing currentDraft
+  if (currentDraft !== "" && newText !== currentDraft) {
+    previousDraft = currentDraft;
   }
+
+  // Update currentDraft to the new text
+  currentDraft = newText;
 }
 
 function acceptChanges() {
   displayDiff(currentDraft, false);
+}
+
+function rejectChanges() {
+  const diffViewer = document.getElementById("diff-viewer");
+  diffViewer.innerHTML = previousDraft;
+  currentDraft = previousDraft;
+  document.getElementById("accept-chances").style.display = "none";
+  document.getElementById("reject-changes").style.display = "none";
 }

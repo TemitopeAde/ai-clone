@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   openTab({ currentTarget: document.querySelector(".tab-button") }, "chat");
   openSearchTab({ currentTarget: document.querySelector(".search-tab-button") }, "videos");
 });
@@ -112,24 +112,28 @@ function displayDiff(newText) {
   const acceptButton = document.getElementById("accept-changes");
 
   const diffHtml = diffStrings(currentDraft, newText);
-  console.log(diffHtml);
   diffViewer.innerHTML = diffHtml;
 
   // Check if there are any differences
   const hasInsertedOrDeleted = diffHtml.includes('class="deleted"') || diffHtml.includes('class="inserted"');
-  if (hasInsertedOrDeleted) {
+  if (hasInsertedOrDeleted && currentDraft !== "") {
       acceptButton.style.display = "block";
   } else {
       acceptButton.style.display = "none";
   }
 
   // Only update currentDraft when there are changes
-  if (hasInsertedOrDeleted) {
+  if (currentDraft === "") {
       currentDraft = newText;
   }
 }
 
 function acceptChanges() {
-  // Placeholder function to handle accepting changes
-  alert('Changes accepted');
+  displayDiff(currentDraft, false);
+}
+
+function rejectChanges() {
+  // Restore the previous draft
+  displayDiff(previousDraft);
+  currentDraft = previousDraft;
 }
